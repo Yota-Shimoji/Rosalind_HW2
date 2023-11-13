@@ -1,0 +1,14 @@
+#TREE
+with open("rosalind_tree.txt", "r") as f:
+    n = int(f.readline().strip())
+    my_dictionary = {i+1:set() for i in range(n)}
+    for line in f.readlines():
+        i,j = map(int,line.split())
+        while isinstance(my_dictionary[i],int):
+            i = my_dictionary[i]
+        while isinstance(my_dictionary[j],int):
+            j = my_dictionary[j]
+        i,j = min(i,j), max(i,j)
+        my_dictionary[i] = my_dictionary[i] | my_dictionary[j] | set([i,j])
+        my_dictionary[j] = i
+    print(len(list(filter(lambda x: isinstance(x,set), my_dictionary.values()))) -1)
