@@ -1,0 +1,32 @@
+#LONG
+f=open('/content/rosalind_long.txt','r')
+line = f.readline().rstrip()
+data=[]
+while line:
+    seq=''
+    line = f.readline().rstrip()
+    while not line.startswith('>') and line:
+        seq = seq + line
+        line = f.readline().rstrip()
+    data.append(seq)
+length=len(data)
+s1=[]
+def popchar(data):
+    for x in data:
+        string=' '.join(data)
+        y=string.count(x[:len(x)//2])
+        if y == 1:
+            char=data.pop(data.index(x))
+            s1.append(char)
+
+while len(data)!=0:
+    popchar(data)
+data=s1
+
+i=0
+while i < len(data)-1:
+    sub=data[i+1][:len(data[i+1])//2]
+    idx=data[i].index(sub)
+    data[i]=data[i][:idx]
+    i=i+1
+print (''.join(data))
