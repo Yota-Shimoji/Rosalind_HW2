@@ -1,0 +1,28 @@
+#GRPH
+f = open("rosalind_grph.txt")
+lst = f.read()
+f.close()
+
+lst = lst.replace('\n', '')
+lst = lst.split('>')
+dna = []
+graph = []
+
+for item in lst:
+    if (len(item) < 1):
+        continue
+    a = item[0:13]
+    b = item[13::]
+    dna.append((a, b))
+
+for i in range(0, len(dna)):
+    f1 = dna[i][1][-3::]
+    for j in range(0, len(dna)):
+        if (i != j):
+            f2 = dna[j][1][0:3]
+            if (f1 == f2):
+                graph.append((dna[i][0], dna[j][0]))
+
+for item in graph:
+
+    print(item[0], item[1])
