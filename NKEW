@@ -1,0 +1,64 @@
+#NKEW
+with open("/content/rosalind_nkew.txt", 'r') as f:
+    f = f.read().split()
+    newicktrees = f[::3]
+    starts = f[1::3]
+    ends = f[2::3]
+
+def node_distance(newick, start, end):
+    if newick.index(start) > newick.index(end):
+        start, end = end, start
+    dist = 0
+    startnodedist = ""
+    for char in newick[newick[newick.index(start):].index(":") + newick.index(start) + 1:]:
+        if char.isdigit():
+            startnodedist += char
+        else:
+            break
+    dist += int(startnodedist)
+
+    endnodedist = ""
+    for char in newick[newick[newick.index(end):].index(":") + newick.index(end) + 1:]:
+        if char.isdigit():
+            endnodedist += char
+        else:
+            break
+    dist += int(endnodedist)
+
+    parenlevel = 0
+
+    for i in range(newick.index(start),newick.index(end)):
+        if i < newick.index(end):
+            if newick[i] == "(":
+                parenlevel += 1
+            if newick[i] == ")":
+                if newick[i+1] == ":" and parenlevel == 0:
+                    newdist = ""
+                    for char in newick[i+2:]:
+                        if char.isdigit():
+                            newdist += char
+                        else:
+                            break
+                    dist += int(newdist)
+                if parenlevel > 0:
+                    parenlevel -= 1
+    parenup = parenlevel - 1
+    for i in range(newick.index(end),len(newick)):
+        if newick[i] == "(":
+            parenlevel += 1
+        if newick[i] == ")":
+            if parenlevel > 0:
+                parenlevel -= 1
+            if newick[i + 1] == ":" and parenlevel == parenup:
+                newdist = ""
+                for char in newick[i + 2:]:
+                    if char.isdigit():
+                        newdist += char
+                    else:
+                        break
+                dist += int(newdist)
+                parenup -= 1
+    return(dist)
+
+for newick, start, end in zip(newicktrees, starts, ends):
+    print(node_distance(newick, start, end), end=" ")
