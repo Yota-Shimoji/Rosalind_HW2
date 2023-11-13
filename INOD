@@ -1,0 +1,4 @@
+#INOD
+inod = 3530
+answer = inod -2
+print(answer)
